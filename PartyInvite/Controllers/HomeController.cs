@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -94,6 +95,50 @@ namespace PartyInvite.Controllers
             };
             decimal cartTotal = cart.TotalPrices();
             return View("Result", (object)string.Format("Total:{0:c}",cartTotal));
+        }
+
+        // GET Home/UserFilterExtension
+        public ViewResult UserFilterExtension()
+        {
+            // create and populate ShoppingCart
+            IEnumerable<Product> products = new ShoppingCart
+            {
+                Products = new List<Product> {
+                    new Product {Name = "Kayak", Category = "Watersports", Price = 275M},
+                    new Product {Name = "Lifejacket", Category = "Watersports", Price = 48.95M},
+                    new Product {Name = "Soccer ball", Category = "Soccer", Price = 19.50M},
+                    new Product {Name = "Corner flag", Category = "Soccer", Price = 34.95M}
+                }
+            };
+            decimal total = 0m;
+            foreach (var item in products.Filter(prod => prod.Category == "Soccer"))
+            {
+                total += item.Price;
+            }
+            return View("Result", (object)string.Format("Total price for Filter:{0:c}", total));
+        }
+
+        // GET Home/FindProducts
+        public ViewResult FindProducts()
+        {
+            Product[] products = {
+                new Product {Name = "Kayak", Category = "Watersports", Price = 275M},
+                new Product {Name = "Lifejacket", Category = "Watersports", Price = 48.95M},
+                new Product {Name = "Soccer ball", Category = "Soccer", Price = 19.50M},
+                new Product {Name = "Corner flag", Category = "Soccer", Price = 34.95M}
+            };
+            var foundProducts = products.OrderByDescending(e => e.Price).Take(3).
+                Select(e => new { e.Name, e.Price });
+            int count = 0;
+            StringBuilder result = new StringBuilder();
+            foreach (var item in foundProducts)
+            {
+                result.AppendFormat("Price:{0:c}", item.Price);
+                if (++count == 3) {
+                    break;
+                }
+            }
+            return View("Result", (object)result.ToString());
         }
     }
 }

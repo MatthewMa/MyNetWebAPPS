@@ -1,0 +1,27 @@
+﻿@model Razor.Models.Product
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <style>
+        #product_name{
+            font-family:'Times New Roman', Times, serif;
+            font-size:large;
+            font-weight:bolder;
+            color:chartreuse;
+        }
+    </style>
+</head>
+<body>
+    <div> 
+        <span id="product_name"><i>@Model.Name</i></span>
+    </div>
+</body>
+</html>
